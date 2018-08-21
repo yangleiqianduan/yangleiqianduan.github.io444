@@ -1822,7 +1822,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #540e59;
+  background: #55de60;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2904,6 +2904,9 @@ hr {
     text-align: center;
   }
 }
+.main-inner {
+  width: 800px;
+}
 .post {
   margin-top: 60px;
   margin-bottom: 60px;
@@ -2911,4 +2914,36 @@ hr {
   -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
   background: url("http://file.ljcdn.com/psd-sinan-file/prod/message_image/8B830BF707064285AFDAF61073CD2F0C.jpg");
+}
+.post-time {
+  color: #555;
+}
+.fa-calendar-o:before,
+.fa-folder-o:before {
+  color: #555;
+}
+.post-meta-item-text {
+  color: #999;
+}
+h2 {
+  margin-left: 15px;
+  font-size: 16px;
+}
+h3 {
+  margin-left: 30px;
+  font-size: 14px;
+}
+h4 {
+  margin-left: 45px;
+}
+h5 {
+  margin-left: 60px;
+}
+@media (max-width: 767px) {
+  h2 {
+    font-size: 16px;
+  }
+  h3 {
+    font-size: 14px;
+  }
 }
