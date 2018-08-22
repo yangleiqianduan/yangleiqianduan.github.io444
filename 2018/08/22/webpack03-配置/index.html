@@ -105,17 +105,17 @@
 
 
 
-<meta name="description" content="split使用1&apos;&apos;.split(&apos;,&apos;) =&amp;gt; [&apos;&apos;]">
+<meta name="description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bug">
-<meta property="og:url" content="http://yangleiqianduan.github.io/2018/08/21/bug/index.html">
+<meta property="og:title" content="webpack03-配置">
+<meta property="og:url" content="http://yangleiqianduan.github.io/2018/08/22/webpack03-配置/index.html">
 <meta property="og:site_name" content="雷雷">
-<meta property="og:description" content="split使用1&apos;&apos;.split(&apos;,&apos;) =&amp;gt; [&apos;&apos;]">
+<meta property="og:description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-21T10:54:05.247Z">
+<meta property="og:updated_time" content="2018-08-22T15:59:23.975Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bug">
-<meta name="twitter:description" content="split使用1&apos;&apos;.split(&apos;,&apos;) =&amp;gt; [&apos;&apos;]">
+<meta name="twitter:title" content="webpack03-配置">
+<meta name="twitter:description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
 
 
 
@@ -145,13 +145,13 @@
 
 
 
-  <link rel="canonical" href="http://yangleiqianduan.github.io/2018/08/21/bug/"/>
+  <link rel="canonical" href="http://yangleiqianduan.github.io/2018/08/22/webpack03-配置/"/>
 
 
 
 
 
-  <title>bug | 雷雷</title>
+  <title>webpack03-配置 | 雷雷</title>
   
 
 
@@ -318,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangleiqianduan.github.io/2018/08/21/bug/">
+    <link itemprop="mainEntityOfPage" href="http://yangleiqianduan.github.io/2018/08/22/webpack03-配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="杨雷">
@@ -335,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bug</h1>
+          <h1 class="post-title" itemprop="name headline">webpack03-配置</h1>
         
 
         <div class="post-meta">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-21T18:54:05+08:00">
-                2018-08-21
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-22T23:37:51+08:00">
+                2018-08-22
               </time>
             
 
@@ -370,8 +370,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugfix/" itemprop="url" rel="index">
-                    <span itemprop="name">bugfix</span>
+                  <a href="/categories/webpack/" itemprop="url" rel="index">
+                    <span itemprop="name">webpack</span>
                   </a>
                 </span>
 
@@ -407,7 +407,55 @@
       
 
       
-        <h1 id="split使用"><a href="#split使用" class="headerlink" title="split使用"></a>split使用</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">''</span>.split(<span class="string">','</span>) =&gt; [<span class="string">''</span>]</span><br></pre></td></tr></table></figure>
+        <p>配置 Webpack 的方式有两种：</p>
+<ul>
+<li>通过一个 JavaScript 文件描述配置，例如使用 <code>webpack.config.js</code> 文件里的配置；</li>
+<li>执行 Webpack 可执行文件时通过命令行参数传入，例如 <code>webpack --devtool source-map</code>。</li>
+</ul>
+<p>这两种方式可以相互搭配，例如执行 Webpack 时通过命令 <code>webpack --config webpack-dev.config.js</code> 指定配置文件，再去 <code>webpack-dev.config.js</code> 文件里描述部分配置。</p>
+<ul>
+<li>Entry 配置模块的入口；</li>
+<li>Output 配置如何输出最终想要的代码；</li>
+<li>Module 配置处理模块的规则；</li>
+<li>Resolve 配置寻找模块的规则；</li>
+<li>Plugins 配置扩展插件；</li>
+<li>DevServer 配置 DevServer；</li>
+</ul>
+<h1 id="Entry"><a href="#Entry" class="headerlink" title="Entry"></a>Entry</h1><hr>
+<p>entry是配置模块的入口，可抽象成输入，Webpack 执行构建的第一步将从入口开始搜寻及递归解析出所有入口依赖的模块。</p>
+<p>entry 配置是必填的，若不填则将导致 Webpack 报错退出。</p>
+<h2 id="context"><a href="#context" class="headerlink" title="context"></a>context</h2><p>Webpack 在寻找相对路径的文件时会以 context 为<code>根目录</code>，context 默认为执行启动 Webpack 时所在的当前工作目录。 如果想改变 context 的默认配置，则可以在配置文件里这样设置它：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span>.<span class="keyword">exports</span> = &#123;</span><br><span class="line">  context: path.resolve(__dirname, <span class="string">'app'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>注意</em></strong>， context 必须是一个<code>绝对路径的字符串</code>。 除此之外，还可以通过在启动 Webpack 时带上参数 webpack –context 来设置 context。</p>
+<p>之所以在这里先介绍 context，是因为 Entry 的路径和其依赖的模块的路径可能采用相对于 context 的路径来描述，<code>context 会影响到这些相对路径所指向的真实文件</code>。</p>
+<h2 id="Entry-类型"><a href="#Entry-类型" class="headerlink" title="Entry 类型"></a>Entry 类型</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>例子</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>‘./app/entry’</td>
+<td>入口模块的文件路径，可以是相对路径。</td>
+</tr>
+<tr>
+<td>array</td>
+<td>[‘./app/entry1’, ‘./app/entry2’]</td>
+<td>入口模块的文件路径，可以是相对路径。</td>
+</tr>
+<tr>
+<td>object</td>
+<td>{ a: ‘./app/entry-a’, b: [‘./app/entry-b1’, ‘./app/entry-b2’]}</td>
+<td>配置多个入口，每个入口生成一个 Chunk</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果是 array 类型，则搭配 output.library 配置项使用时，只有数组里的最后一个入口文件的模块会被导出。</p>
+</blockquote>
 
       
     </div>
@@ -443,15 +491,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/08/22/webpack02-loader、plugin/" rel="next" title="介绍">
+                <i class="fa fa-chevron-left"></i> 介绍
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/21/webpack01-前端的发展/" rel="prev" title="前端的发展">
-                前端的发展 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -593,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#split使用"><span class="nav-number">1.</span> <span class="nav-text">split使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Entry"><span class="nav-number">1.</span> <span class="nav-text">Entry</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#context"><span class="nav-number">1.1.</span> <span class="nav-text">context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Entry-类型"><span class="nav-number">1.2.</span> <span class="nav-text">Entry 类型</span></a></li></ol></li></ol></div>
             
 
           </div>
