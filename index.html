@@ -318,6 +318,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yangleiqianduan.github.io/2018/08/22/webpack02-loader、plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨雷">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雷雷">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/22/webpack02-loader、plugin/" itemprop="url">loader、plugin</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-22T22:41:41+08:00">
+                2018-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webpack/" itemprop="url" rel="index">
+                    <span itemprop="name">webpack</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="css-loader"><a href="#css-loader" class="headerlink" title="css-loader"></a>css-loader</h1><hr>
+<p>Webpack 不原生支持解析 CSS 文件。要支持非 JavaScript 类型的文件，需要使用 Webpack 的 Loader 机制<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// JavaScript 执行入口文件</span></span><br><span class="line">  entry: <span class="string">'./main.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// 把所有依赖的模块合并输出到一个 bundle.js 文件</span></span><br><span class="line">    filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">    <span class="comment">// 输出文件都放到 dist 目录下</span></span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'./dist'</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 用正则去匹配要用该 loader 转换的 CSS 文件</span></span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader?minimize'</span>],</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>use</code> 属性的值需要是一个由 Loader 名称组成的数组，Loader 的执行顺序是由后到前的；</li>
+<li>每一个 Loader 都可以通过 URL querystring 的方式<code>传入参数</code>，例如 css-loader?minimize 中的 minimize 告诉 css-loader 要开启 CSS 压缩。</li>
+</ul>
+<p>给 Loader 传入属性的方式除了有 querystring 外，还可以通过 Object 传入，以上的 Loader 配置可以修改为如下:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">use</span>: [</span><br><span class="line">  <span class="string">'style-loader'</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attribute">loader</span>:<span class="string">'css-loader'</span>,</span><br><span class="line">    <span class="attribute">options</span>:&#123;</span><br><span class="line">      <span class="attribute">minimize</span>:true,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>除了在 webpack.config.js 配置文件中配置 Loader 外，还可以在源码中指定用什么 Loader 去处理文件。 以加载 CSS 文件为例，修改上面例子中的 main.js 如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'style-loader!css-loader?minimize!./main.css'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这样就能指定对 ./main.css 这个文件先采用 css-loader 再采用 style-loader 转换</p>
+<h1 id="Plugin"><a href="#Plugin" class="headerlink" title="Plugin"></a>Plugin</h1><hr>
+<p>plugin 是用来扩展 Webpack 功能的，通过在构建流程里注入钩子实现，它给 Webpack 带来了很大的灵活性。</p>
+<p>通过 Loader 加载了 CSS 文件，本节将通过 Plugin 把注入到 bundle.js 文件里的 CSS 提取到单独的文件中，配置修改如下：<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">'extract-text-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// JavaScript 执行入口文件</span></span><br><span class="line">  entry: <span class="string">'./main.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// 把所有依赖的模块合并输出到一个 bundle.js 文件</span></span><br><span class="line">    filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">    <span class="comment">// 把输出文件都放到 dist 目录下</span></span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'./dist'</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 用正则去匹配要用该 loader 转换的 CSS 文件</span></span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">          <span class="comment">// 转换 .css 文件需要使用的 Loader</span></span><br><span class="line">          use: [<span class="string">'css-loader'</span>],</span><br><span class="line">        &#125;),</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> ExtractTextPlugin(&#123;</span><br><span class="line">      <span class="comment">// 从 .js 文件中提取出来的 .css 文件的名称</span></span><br><span class="line">      filename: <span class="string">`[name]_[contenthash:8].css`</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>Webpack 是通过 plugins 属性来配置需要使用的插件列表的。 plugins 属性是一个数组，里面的每一项都是<strong><em><code>插件的一个实例</code></em></strong>，在实例化一个组件时可以通过<strong><em><code>构造函数传入这个组件支持的配置属性</code></em></strong>。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yangleiqianduan.github.io/2018/08/21/webpack01-前端的发展/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -716,7 +875,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
