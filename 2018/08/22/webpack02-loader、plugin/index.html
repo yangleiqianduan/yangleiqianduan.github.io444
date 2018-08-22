@@ -107,14 +107,14 @@
 
 <meta name="description" content="css-loader Webpack 不原生支持解析 CSS 文件。要支持非 JavaScript 类型的文件，需要使用 Webpack 的 Loader 机制123456789101112131415161718192021const path = require(&apos;path&apos;);module.exports = &amp;#123;  // JavaScript 执行入口文件  entry: &apos;./m">
 <meta property="og:type" content="article">
-<meta property="og:title" content="loader、plugin">
+<meta property="og:title" content="介绍">
 <meta property="og:url" content="http://yangleiqianduan.github.io/2018/08/22/webpack02-loader、plugin/index.html">
 <meta property="og:site_name" content="雷雷">
 <meta property="og:description" content="css-loader Webpack 不原生支持解析 CSS 文件。要支持非 JavaScript 类型的文件，需要使用 Webpack 的 Loader 机制123456789101112131415161718192021const path = require(&apos;path&apos;);module.exports = &amp;#123;  // JavaScript 执行入口文件  entry: &apos;./m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-22T15:09:48.751Z">
+<meta property="og:updated_time" content="2018-08-22T15:34:01.701Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="loader、plugin">
+<meta name="twitter:title" content="介绍">
 <meta name="twitter:description" content="css-loader Webpack 不原生支持解析 CSS 文件。要支持非 JavaScript 类型的文件，需要使用 Webpack 的 Loader 机制123456789101112131415161718192021const path = require(&apos;path&apos;);module.exports = &amp;#123;  // JavaScript 执行入口文件  entry: &apos;./m">
 
 
@@ -151,7 +151,7 @@
 
 
 
-  <title>loader、plugin | 雷雷</title>
+  <title>介绍 | 雷雷</title>
   
 
 
@@ -335,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">loader、plugin</h1>
+          <h1 class="post-title" itemprop="name headline">介绍</h1>
         
 
         <div class="post-meta">
@@ -421,6 +421,22 @@
 <p>plugin 是用来扩展 Webpack 功能的，通过在构建流程里注入钩子实现，它给 Webpack 带来了很大的灵活性。</p>
 <p>通过 Loader 加载了 CSS 文件，本节将通过 Plugin 把注入到 bundle.js 文件里的 CSS 提取到单独的文件中，配置修改如下：<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">'extract-text-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// JavaScript 执行入口文件</span></span><br><span class="line">  entry: <span class="string">'./main.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// 把所有依赖的模块合并输出到一个 bundle.js 文件</span></span><br><span class="line">    filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">    <span class="comment">// 把输出文件都放到 dist 目录下</span></span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'./dist'</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 用正则去匹配要用该 loader 转换的 CSS 文件</span></span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">          <span class="comment">// 转换 .css 文件需要使用的 Loader</span></span><br><span class="line">          use: [<span class="string">'css-loader'</span>],</span><br><span class="line">        &#125;),</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> ExtractTextPlugin(&#123;</span><br><span class="line">      <span class="comment">// 从 .js 文件中提取出来的 .css 文件的名称</span></span><br><span class="line">      filename: <span class="string">`[name]_[contenthash:8].css`</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>Webpack 是通过 plugins 属性来配置需要使用的插件列表的。 plugins 属性是一个数组，里面的每一项都是<strong><em><code>插件的一个实例</code></em></strong>，在实例化一个组件时可以通过<strong><em><code>构造函数传入这个组件支持的配置属性</code></em></strong>。</p>
+<h1 id="实时预览"><a href="#实时预览" class="headerlink" title="实时预览"></a>实时预览</h1><p>Webpack 默认是关闭监听模式的，你可以在启动 Webpack 时通过 <code>webpack --watch</code> 来开启监听模式。</p>
+<p>通过 DevServer 启动的 Webpack 会开启监听模式，当发生变化时重新执行完构建后通知 DevServer。 DevServer 会让 Webpack 在构建出的 JavaScript 代码里注入一个代理客户端用于控制网页，网页和 DevServer 之间通过 WebSocket 协议通信， 以方便 DevServer 主动向客户端发送命令。 DevServer 在收到来自 Webpack 的文件变化通知时通过注入的客户端控制网页刷新。</p>
+<p>如果尝试修改 index.html 文件并保存，你会发现这并不会触发以上机制，导致这个问题的原因是 Webpack 在启动时会以配置里的 entry 为入口去递归解析出 entry 所依赖的文件，只有 entry 本身和依赖的文件才会被 Webpack 添加到监听列表里。 而 index.html 文件是脱离了 JavaScript 模块化系统的，所以 Webpack 不知道它的存在。</p>
+<h1 id="模块热替换"><a href="#模块热替换" class="headerlink" title="模块热替换"></a>模块热替换</h1><p>只需在启动 DevServer 时带上<code>--hot</code> 参数</p>
+<h1 id="Source-Map"><a href="#Source-Map" class="headerlink" title="Source Map"></a>Source Map</h1><p>调试工具可以通过 Source Map 映射代码，让你在源代码上断点调试。 Webpack 支持生成 Source Map，只需在启动时带上 <code>--devtool source-map</code> 参数。</p>
+<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><ul>
+<li>Entry：入口，Webpack 执行构建的第一步将从 Entry 开始，可抽象成输入。</li>
+<li>Module：模块，在 Webpack 里一切皆模块，一个模块对应着一个文件。Webpack 会从配置的 Entry 开始递归找出所有依赖的模块。</li>
+<li>Chunk：代码块，一个 Chunk 由多个模块组合而成，用于代码合并与分割。</li>
+<li>Loader：模块转换器，用于把模块原内容按照需求转换成新内容。</li>
+<li>Plugin：扩展插件，在 Webpack 构建流程中的特定时机注入扩展逻辑来改变构建结果或做你想要的事情。</li>
+<li>Output：输出结果，在 Webpack 经过一系列处理并得出最终想要的代码后输出结果。</li>
+</ul>
+<blockquote>
+<p>Webpack 启动后会从 Entry 里配置的 Module 开始递归解析 Entry 依赖的所有 Module。 每找到一个 Module， 就会根据配置的 Loader 去找出对应的转换规则，对 Module 进行转换后，再解析出当前 Module 依赖的 Module。 这些模块会以 Entry 为单位进行分组，一个 Entry 和其所有依赖的 Module 被分到一个组也就是一个 Chunk。最后 Webpack 会把所有 Chunk 转换成文件输出。 在整个流程中 Webpack 会在恰当的时机执行 Plugin 里定义的逻辑。</p>
+</blockquote>
 
       
     </div>
@@ -551,7 +567,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/bugfix/index.html">
+                <a href="/categories/index.html">
                   <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
@@ -606,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#css-loader"><span class="nav-number">1.</span> <span class="nav-text">css-loader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Plugin"><span class="nav-number">2.</span> <span class="nav-text">Plugin</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#css-loader"><span class="nav-number">1.</span> <span class="nav-text">css-loader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Plugin"><span class="nav-number">2.</span> <span class="nav-text">Plugin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实时预览"><span class="nav-number">3.</span> <span class="nav-text">实时预览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模块热替换"><span class="nav-number">4.</span> <span class="nav-text">模块热替换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Source-Map"><span class="nav-number">5.</span> <span class="nav-text">Source Map</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#核心概念"><span class="nav-number">6.</span> <span class="nav-text">核心概念</span></a></li></ol></div>
             
 
           </div>
