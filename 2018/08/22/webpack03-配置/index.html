@@ -112,7 +112,7 @@
 <meta property="og:site_name" content="雷雷">
 <meta property="og:description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-23T03:04:54.537Z">
+<meta property="og:updated_time" content="2018-08-23T15:04:30.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack03-配置">
 <meta name="twitter:description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
@@ -459,7 +459,7 @@
 <h2 id="配置动态-Entry"><a href="#配置动态-Entry" class="headerlink" title="配置动态 Entry"></a>配置动态 Entry</h2><p>假如项目里有多个页面需要为每个页面的入口配置一个 Entry ，但这些页面的数量可能会不断增长，则这时 Entry 的配置会受到到其他因素的影响导致不能写成静态的值。其解决方法是把 Entry 设置成一个函数去动态返回上面所说的配置，代码如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span> 同步函数</span><br><span class="line">entry: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    a:<span class="string">'./pages/a'</span>,</span><br><span class="line">    b:<span class="string">'./pages/b'</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="regexp">//</span> 异步函数</span><br><span class="line">entry: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="function"><span class="params">(resolve)</span>=&gt;</span>&#123;</span><br><span class="line">    resolve(&#123;</span><br><span class="line">       a:<span class="string">'./pages/a'</span>,</span><br><span class="line">       b:<span class="string">'./pages/b'</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>有多个 Chunk 要输出时，就需要借助模版和变量了。前面说到 Webpack 会为每个 Chunk取一个名称，可以根据 Chunk 的名称来区分输出的文件名：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filename:</span> <span class="string">'[name].js'</span></span><br></pre></td></tr></table></figure></p>
 <p>代码里的 [name] 代表用内置的 name 变量去替换[name]，这时你可以把它看作一个字符串模块函数， 每个要输出的 Chunk 都会通过这个函数去拼接出输出的文件名称。</p>
-<p>内置变量除了 name 还包括：<br>| 变量名   |      含义      |<br>|———-|————-|<br>|id    Chunk|的唯一标识，从0开始<br>|name|Chunk 的名称<br>|hash|Chunk 的唯一标识的 Hash 值<br>|chunkhash|Chunk 内容的 Hash 值</p>
+<p>内置变量除了 name 还包括：<br>| 变量名   |      含义      |<br>|———-|————-|<br>|id    Chunk|的唯一标识，从0开始|<br>|name|Chunk 的名称|<br>|hash|Chunk 的唯一标识的 Hash 值|<br>|chunkhash|Chunk 内容的 Hash 值|</p>
 
       
     </div>
@@ -590,7 +590,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/bugfix/index.html">
+                <a href="/categories/index.html">
                   <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">categories</span>
                 </a>

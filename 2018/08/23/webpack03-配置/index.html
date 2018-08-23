@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="瓦片也有翻身日，东风也有转难时" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置-Entry、Output">
+<meta property="og:url" content="http://yangleiqianduan.github.io/2018/08/23/webpack03-配置/index.html">
+<meta property="og:site_name" content="雷雷">
+<meta property="og:description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-23T15:58:16.783Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="配置-Entry、Output">
+<meta name="twitter:description" content="配置 Webpack 的方式有两种：  通过一个 JavaScript 文件描述配置，例如使用 webpack.config.js 文件里的配置； 执行 Webpack 可执行文件时通过命令行参数传入，例如 webpack --devtool source-map。  这两种方式可以相互搭配，例如执行 Webpack 时通过命令 webpack --config webpack-dev.confi">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yangleiqianduan.github.io/2018/08/23/webpack03-配置/"/>
+
+
+
+
+
+  <title>配置-Entry、Output | 雷雷</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雷雷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Sitemap
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yangleiqianduan.github.io/2018/08/23/webpack03-配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨雷">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雷雷">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">配置-Entry、Output</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-23T23:37:51+08:00">
+                2018-08-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webpack/" itemprop="url" rel="index">
+                    <span itemprop="name">webpack</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>配置 Webpack 的方式有两种：</p>
+<ul>
+<li>通过一个 JavaScript 文件描述配置，例如使用 <code>webpack.config.js</code> 文件里的配置；</li>
+<li>执行 Webpack 可执行文件时通过命令行参数传入，例如 <code>webpack --devtool source-map</code>。</li>
+</ul>
+<p>这两种方式可以相互搭配，例如执行 Webpack 时通过命令 <code>webpack --config webpack-dev.config.js</code> 指定配置文件，再去 <code>webpack-dev.config.js</code> 文件里描述部分配置。</p>
+<ul>
+<li>Entry 配置模块的入口；</li>
+<li>Output 配置如何输出最终想要的代码；</li>
+<li>Module 配置处理模块的规则；</li>
+<li>Resolve 配置寻找模块的规则；</li>
+<li>Plugins 配置扩展插件；</li>
+<li>DevServer 配置 DevServer；</li>
+</ul>
+<h1 id="Entry"><a href="#Entry" class="headerlink" title="Entry"></a>Entry</h1><hr>
+<p>entry是配置模块的入口，可抽象成输入，Webpack 执行构建的第一步将从入口开始搜寻及递归解析出所有入口依赖的模块。</p>
+<p>entry 配置是必填的，若不填则将导致 Webpack 报错退出。</p>
+<h2 id="context"><a href="#context" class="headerlink" title="context"></a>context</h2><p>Webpack 在寻找相对路径的文件时会以 context 为<code>根目录</code>，context 默认为执行启动 Webpack 时所在的当前工作目录。 如果想改变 context 的默认配置，则可以在配置文件里这样设置它：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span>.<span class="keyword">exports</span> = &#123;</span><br><span class="line">  context: path.resolve(__dirname, <span class="string">'app'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong><em>注意</em></strong>， context 必须是一个<code>绝对路径的字符串</code>。 除此之外，还可以通过在启动 Webpack 时带上参数 webpack –context 来设置 context。</p>
+<p>之所以在这里先介绍 context，是因为 Entry 的路径和其依赖的模块的路径可能采用相对于 context 的路径来描述，<code>context 会影响到这些相对路径所指向的真实文件</code>。</p>
+<h2 id="Entry-类型"><a href="#Entry-类型" class="headerlink" title="Entry 类型"></a>Entry 类型</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>例子</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>‘./app/entry’</td>
+<td>入口模块的文件路径，可以是相对路径。</td>
+</tr>
+<tr>
+<td>array</td>
+<td>[‘./app/entry1’, ‘./app/entry2’]</td>
+<td>入口模块的文件路径，可以是相对路径。</td>
+</tr>
+<tr>
+<td>object</td>
+<td>{ a: ‘./app/entry-a’, b: [‘./app/entry-b1’, ‘./app/entry-b2’]}</td>
+<td>配置多个入口，每个入口生成一个 Chunk</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果是 array 类型，则搭配 output.library 配置项使用时，只有数组里的最后一个入口文件的模块会被导出。</p>
+</blockquote>
+<h3 id="配置动态-Entry"><a href="#配置动态-Entry" class="headerlink" title="配置动态 Entry"></a>配置动态 Entry</h3><p>假如项目里有多个页面需要为每个页面的入口配置一个 Entry ，但这些页面的数量可能会不断增长，则这时 Entry 的配置会受到到其他因素的影响导致不能写成静态的值。其解决方法是把 Entry 设置成一个函数去动态返回上面所说的配置，代码如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span> 同步函数</span><br><span class="line">entry: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    a:<span class="string">'./pages/a'</span>,</span><br><span class="line">    b:<span class="string">'./pages/b'</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="regexp">//</span> 异步函数</span><br><span class="line">entry: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="function"><span class="params">(resolve)</span>=&gt;</span>&#123;</span><br><span class="line">    resolve(&#123;</span><br><span class="line">       a:<span class="string">'./pages/a'</span>,</span><br><span class="line">       b:<span class="string">'./pages/b'</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="分离-应用程序-app-和-公共库-vendor-入口"><a href="#分离-应用程序-app-和-公共库-vendor-入口" class="headerlink" title="分离 应用程序(app) 和 公共库(vendor) 入口"></a>分离 应用程序(app) 和 公共库(vendor) 入口</h3><pre><code>webpack.config.js
+</code></pre><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="built_in">config</span> = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/app.js'</span>,</span><br><span class="line">    vendors: <span class="string">'./src/vendors.js'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code>是什么？从表面上看，这告诉我们 webpack 从 app.js 和 vendors.js 开始创建依赖图表(dependency graph)。这些图表是彼此完全分离、互相独立的（每个 bundle 中都有一个 webpack 引导(bootstrap)）。这种方式比较常见于，只有一个入口起点（不包括 vendor）的单页应用程序(single page application)中。
+
+为什么？此设置允许你使用 CommonsChunkPlugin 从「应用程序 bundle」中提取 vendor 引用(vendor reference) 到 vendor bundle，并把 vendor 引用的部分替换为 __webpack_require__() 调用。如果应用程序 bundle 中没有 vendor 代码，那么你可以在 webpack 中实现被称为长效缓存的通用模式。
+</code></pre><h2 id="output"><a href="#output" class="headerlink" title="output"></a>output</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="built_in">config</span> = &#123;</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">    path: <span class="string">'/home/proj/public/assets'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span>.exports = <span class="built_in">config</span>;</span><br></pre></td></tr></table></figure>
+<p>有多个 Chunk 要输出时，就需要借助模版和变量了。前面说到 Webpack 会为每个 Chunk取一个名称，可以根据 Chunk 的名称来区分输出的文件名：</p>
+<h3 id="filename"><a href="#filename" class="headerlink" title="filename"></a>filename</h3><p>首选推荐：// main.js || bundle.js || index.js<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filename:</span> <span class="string">'[name].js'</span></span><br></pre></td></tr></table></figure></p>
+<p>代码里的 [name] 代表用内置的 name 变量去替换[name]，这时你可以把它看作一个字符串模块函数， 每个要输出的 Chunk 都会通过这个函数去拼接出输出的文件名称。</p>
+<p>内置变量除了 name 还包括：</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id    Chunk</td>
+<td>的唯一标识，从0开始</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Chunk 的名称</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>Chunk 的唯一标识的 Hash 值</td>
+</tr>
+<tr>
+<td>chunkhash</td>
+<td>Chunk 内容的 Hash 值</td>
+</tr>
+</tbody>
+</table>
+<p>其中 hash 和 chunkhash 的长度是可指定的，<code>[hash:8]</code> 代表取8位 Hash 值，默认是20位。</p>
+<blockquote>
+<p>注意 ExtractTextWebpackPlugin 插件是使用 contenthash 来代表哈希值而不是 chunkhash， 原因在于 ExtractTextWebpackPlugin 提取出来的内容是代码内容本身而不是由一组模块组成的 Chunk。</p>
+</blockquote>
+<h3 id="chunkFilename"><a href="#chunkFilename" class="headerlink" title="chunkFilename"></a>chunkFilename</h3><p>只用于指定在运行过程中生成的 Chunk 在输出时的文件名称。 常见的会在运行时生成 Chunk 场景有在使用 <code>CommonChunkPlugin</code>、使用 <code>import(&#39;path/to/module&#39;)</code> 动态加载等时。</p>
+<h3 id="path"><a href="#path" class="headerlink" title="path"></a>path</h3><p>output.path 配置输出文件存放在本地的目录，必须是 <strong><em>string 类型的绝对路径</em></strong>。通常通过 Node.js 的 path 模块去获取绝对路径：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">path</span>: <span class="built_in">path</span>.resolve(__dirname, <span class="string">'dist_[hash]'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="publicPath"><a href="#publicPath" class="headerlink" title="publicPath"></a>publicPath</h3><p>在复杂的项目里可能会有一些构建出的资源需要异步加载，加载这些异步资源需要对应的 URL 地址。</p>
+<p><code>output.publicPath</code> 配置发布到线上资源的 URL 前缀，为string 类型。 默认值是空字符串 ‘’，即使用相对路径。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filename:</span><span class="string">'[name]_[chunkhash:8].js'</span></span><br><span class="line"><span class="string">publicPath:</span> <span class="string">'https://cdn.example.com/assets/'</span></span><br></pre></td></tr></table></figure>
+<p>这时发布到线上的 HTML 在引入 JavaScript 文件时就需要：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'https://cdn.example.com/assets/a_12345678.js'</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p> output.path 和 output.publicPath 都支持字符串模版，内置变量只有一个：hash 代表一次编译操作的 Hash 值。</p>
+</blockquote>
+<h3 id="output-crossOriginLoading"><a href="#output-crossOriginLoading" class="headerlink" title="output.crossOriginLoading"></a>output.crossOriginLoading</h3><p>   此选项启用跨域加载(cross-origin loading) chunk。</p>
+<p>   <code>可选的值有：</code></p>
+<p>   false - 禁用跨域加载</p>
+<p>   “anonymous” - 启用跨域加载。当使用 anonymous 时，发送不带凭据(credential)的请求。</p>
+<p>   “use-credentials” - 启用跨域加载。发送带凭据(credential)的请求。</p>
+<p>   <code>默认值：</code> false</p>
+<h3 id="output-devtoolLineToLine"><a href="#output-devtoolLineToLine" class="headerlink" title="output.devtoolLineToLine"></a>output.devtoolLineToLine</h3><p>   所有/指定模块启用行到行映射(line-to-line mapped)模式。行到行映射模式使用一个简单的 SourceMap，即生成资源(generated source)的每一行都映射到原始资源(original source)的同一行。这是一个可做性能优化之处。当你需要更好的性能，并且只要确保输入行(input line)和生成行(generated line)匹配时，才会考虑启用。</p>
+<p>   true 在所有模块启用（不推荐）</p>
+<p>   {test, include, exclude} 对象，对特定文件启用（类似于 module.loaders）。</p>
+<p>   <code>默认值：</code>false</p>
+<h3 id="output-filename"><a href="#output-filename" class="headerlink" title="output.filename"></a>output.filename</h3><p>   指定硬盘每个输出文件的名称。在这里你不能指定为绝对路径！output.path 选项规定了文件被写入硬盘的位置。filename 仅用于命名每个文件。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//单个入口</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attribute">entry</span>: <span class="string">'./src/app.js'</span>,</span><br><span class="line">  <span class="attribute">output</span>: &#123;</span><br><span class="line">    <span class="attribute">filename</span>: <span class="string">'bundle.js'</span>,</span><br><span class="line">    <span class="attribute">path</span>: __dirname + <span class="string">'/build'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>   // 写入到硬盘：./build/bundle.js</p>
+<p>   多个入口</p>
+<p>   如果你的配置创建了多个 “chunk”（例如使用多个入口起点或使用类似 CommonsChunkPlugin 的插件），你应该使用以下的替换方式来确保每个文件名都不重复。</p>
+<p>   [name] 被 chunk 的 name 替换。</p>
+<p>   [hash] 被 compilation 生命周期的 hash 替换。</p>
+<p>   [chunkhash] 被 chunk 的 hash 替换。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attribute">entry</span>: &#123;</span><br><span class="line">    app: <span class="string">'./src/app.js'</span>,</span><br><span class="line">    search: <span class="string">'./src/search.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="selector-tag">output</span>: &#123;</span><br><span class="line">    <span class="attribute">filename</span>: <span class="string">'[name].js'</span>,</span><br><span class="line">    path: __dirname + <span class="string">'/build'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>   // 写入到硬盘：./build/app.js, ./build/search.js</p>
+<h3 id="output-hotUpdateChunkFilename"><a href="#output-hotUpdateChunkFilename" class="headerlink" title="output.hotUpdateChunkFilename"></a>output.hotUpdateChunkFilename</h3><p>   热更新 chunk(Hot Update Chunk) 的文件名。它们在 output.path 目录中。</p>
+<p>   [id] 被 chunk 的 id 替换。</p>
+<p>   [hash] 被 compilation 生命周期的 hash 替换。（最后一个 hash 存储在记录中）</p>
+<p>   <code>默认值：</code> “[id].[hash].hot-update.js”</p>
+<h3 id="output-hotUpdateFunction"><a href="#output-hotUpdateFunction" class="headerlink" title="output.hotUpdateFunction"></a>output.hotUpdateFunction</h3><p>   webpack 中用于异步加载(async load)热更新(hot update) chunk 的 JSONP 函数。</p>
+<p>   默认值：”webpackHotUpdate”</p>
+<p>   output.hotUpdateMainFilename<br>   热更新主文件(hot update main file)的文件名。</p>
+<p>   [hash] 被 compilation 生命周期的 hash 替换。（最后一个 hash 存储在记录中）</p>
+<p>  <code>默认值：</code>“[hash].hot-update.json”</p>
+<h3 id="output-jsonpFunction"><a href="#output-jsonpFunction" class="headerlink" title="output.jsonpFunction"></a>output.jsonpFunction</h3><p>   webpack 中用于异步加载(async loading) chunk 的 JSONP 函数。</p>
+<p>   较短的函数可能会减少文件大小。当单页有多个 webpack 实例时，请使用不同的标识符(identifier)。</p>
+<p>   默认值：”webpackJsonp”</p>
+<p>   output.library<br>   如果设置此选项，会将 bundle 导出为 library。output.library 是 library 的名称。</p>
+<p>   如果你正在编写 library，并且需要将其发布为单独的文件，请使用此选项。</p>
+<h3 id="output-libraryTarget"><a href="#output-libraryTarget" class="headerlink" title="output.libraryTarget"></a>output.libraryTarget</h3><p>   library 的导出格式</p>
+<p>   “var” - 导出为一个变量：var Library = xxx（默认）</p>
+<p>   “this” - 导出为 this 的一个属性：this[“Library”] = xxx</p>
+<p>   “commonjs” - 导出为 exports 的一个属性：exports[“Library”] = xxx</p>
+<p>   “commonjs2” - 通过 module.exports：module.exports = xxx 导出</p>
+<p>   “amd” - 导出为 AMD（可选命名 - 通过 library 选项设置名称）</p>
+<p>   “umd” - 导出为 AMD，CommonJS2 或者导出为 root 的属性</p>
+<p>   <code>默认值：</code>“var”</p>
+<p>   如果 output.library 未设置，但是 output.libraryTarget 被设置为 var 以外的值，则「所导出对象」的每个属性都被复制到「对应的被导出对象」上（除了 amd，commonjs2 和 umd）。</p>
+<h3 id="output-path"><a href="#output-path" class="headerlink" title="output.path"></a>output.path</h3><p>   导出目录为绝对路径（必选项）。</p>
+<p>   [hash] 被 compilation 生命周期的 hash 替换。<br>      config.js</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">output:</span> &#123;</span><br><span class="line"><span class="symbol">    path:</span> <span class="string">"/home/proj/public/assets"</span>,</span><br><span class="line"><span class="symbol">    publicPath:</span> <span class="string">"/assets/"</span></span><br><span class="line">&#125;</span><br><span class="line">index.html</span><br><span class="line"></span><br><span class="line"><span class="params">&lt;head&gt;</span></span><br><span class="line">  <span class="params">&lt;link href="/assets/spinner.gif"/&gt;</span></span><br><span class="line"><span class="params">&lt;/head&gt;</span></span><br></pre></td></tr></table></figure>
+<p>   接下来是一个更复杂的例子，来说明对资源使用 CDN 和 hash。</p>
+<p>   config.js</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">output</span>: &#123;</span><br><span class="line">    <span class="attribute">path</span>: <span class="string">"/home/proj/cdn/assets/[hash]"</span>,</span><br><span class="line">    publicPath: <span class="string">"http://cdn.example.com/assets/[hash]/"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   注意：在编译时不知道最终输出文件的 publicPath 的情况下，publicPath 可以留空，并且在入口起点文件运行时动态设置。如果你在编译时不知道 publicPath，你可以先忽略它，并且在入口起点设置 <strong>webpack_public_path</strong>。</p>
+<pre><code>__webpack_public_path__ = myRuntimePublicPath
+</code></pre><p>   // 其他的应用程序入口<br>   output.sourceMapFilename<br>   JavaScript 文件的 SourceMap 的文件名。它们在 output.path 目录中。</p>
+<p>   [file] 被 JavaScript 文件的文件名替换。</p>
+<p>   [id] 被 chunk 的 id 替换。</p>
+<p>   [hash] 被 compilation 生命周期的 hash 替换。</p>
+<p>   默认值：”[file].map”</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+      <div>
+
+    <div style="text-align:center;color: #555555d1;font-size:16px;margin-top:100px">-------------东隅已逝 -♥︎- 桑榆非晚-------------</div>
+
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/22/webpack02-loader、plugin/" rel="next" title="介绍">
+                <i class="fa fa-chevron-left"></i> 介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">杨雷</p>
+              <p class="site-description motion-element" itemprop="description">老夫是个前端</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/bugfix/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.im/welcome/frontend" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-spinner"></i>掘金</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Entry"><span class="nav-number">1.</span> <span class="nav-text">Entry</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#context"><span class="nav-number">1.1.</span> <span class="nav-text">context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Entry-类型"><span class="nav-number">1.2.</span> <span class="nav-text">Entry 类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置动态-Entry"><span class="nav-number">1.2.1.</span> <span class="nav-text">配置动态 Entry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分离-应用程序-app-和-公共库-vendor-入口"><span class="nav-number">1.2.2.</span> <span class="nav-text">分离 应用程序(app) 和 公共库(vendor) 入口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#output"><span class="nav-number">1.3.</span> <span class="nav-text">output</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#filename"><span class="nav-number">1.3.1.</span> <span class="nav-text">filename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chunkFilename"><span class="nav-number">1.3.2.</span> <span class="nav-text">chunkFilename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#path"><span class="nav-number">1.3.3.</span> <span class="nav-text">path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#publicPath"><span class="nav-number">1.3.4.</span> <span class="nav-text">publicPath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-crossOriginLoading"><span class="nav-number">1.3.5.</span> <span class="nav-text">output.crossOriginLoading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-devtoolLineToLine"><span class="nav-number">1.3.6.</span> <span class="nav-text">output.devtoolLineToLine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-filename"><span class="nav-number">1.3.7.</span> <span class="nav-text">output.filename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-hotUpdateChunkFilename"><span class="nav-number">1.3.8.</span> <span class="nav-text">output.hotUpdateChunkFilename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-hotUpdateFunction"><span class="nav-number">1.3.9.</span> <span class="nav-text">output.hotUpdateFunction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-jsonpFunction"><span class="nav-number">1.3.10.</span> <span class="nav-text">output.jsonpFunction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-libraryTarget"><span class="nav-number">1.3.11.</span> <span class="nav-text">output.libraryTarget</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-path"><span class="nav-number">1.3.12.</span> <span class="nav-text">output.path</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨雷</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
